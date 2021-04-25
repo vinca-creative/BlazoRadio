@@ -1,0 +1,42 @@
+﻿@inject IJSRuntime JS;
+
+<section class="playlist">
+    <div class="close"><i class="fa times-circle"></i></div>
+    <ul>
+        @foreach (var station in Stations)
+        {
+            <li class="track" data-album="the 2nd Law" data-trackid="65852671" @onclick="@(e => SelectStation(station.StationUUID))">
+                <div>
+                    <figure>
+                        <img src="@station.IconURL" />
+                    </figure>
+                    <label>
+                        <strong>@station.Name</strong>
+                        <span><i class="fa fa-play"></i></span>
+                        @*<time>02:31</time>*@
+                    </label>
+                </div>
+            </li>
+        }
+    </ul>
+</section>
+
+@code{
+
+    [Parameter]
+    public IEnumerable<Model.Station> Stations { get; set; }
+
+    [Parameter]
+    public EventCallback<Model.Station> OnStationSelected { get; set; }
+
+    private void SelectStation(string stationId)
+    {
+        var selectedStation = Stations.FirstOrDefault(q => q.StationUUID == stationId);
+        if (selectedStation != null)
+        {
+            JS.InvokeVoidAsync("HidePlayList");
+            OnStationSelected.InvokeAsync(selectedStation);
+        }
+    }
+
+}

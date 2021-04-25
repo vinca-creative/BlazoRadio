@@ -1,0 +1,16 @@
+﻿@inherits LayoutComponentBase
+@inject IJSRuntime JS;
+
+<LeftNavMenu />
+<button class="openbtn" @onclick="OpenLeftNavigation">&#9776; Toggle Sidepanel</button>
+<section class="main">
+    @Body
+</section>
+
+@code{
+
+    private void OpenLeftNavigation()
+    {
+        JS.InvokeVoidAsync("openNav");
+    }
+}

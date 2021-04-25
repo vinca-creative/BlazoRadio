@@ -1,0 +1,78 @@
+﻿@inject IJSRuntime JS;
+
+<div id="player">
+    <section class="player">
+        <div class="menu-button"><span></span></div>
+
+        <Playlist Stations="@Stations" OnStationSelected="StationSelected" />
+
+        <figure class="currentTrack">
+            <div class="currentTrackCover"></div>
+            <img class="trackIcon" src="@CurrentStation.IconURL" />
+            <figcaption>JAZZ<br/>
+            <label id="playStatus"></label></figcaption>
+        </figure>
+
+        <section class="controls">
+            <h2 class="title"><marquee direction="right" scrollamount="6">@CurrentStation.Name</marquee></h2>
+            <div class="audio">
+                <audio id="audio" src="@CurrentStation.ResolveURL">
+                </audio>
+                <div class="scrubber">
+                    <div class="progress"></div>
+                    <div class="loaded"></div>
+                </div>
+                <div class="play-pause">
+                    <div class="playbuttons">
+                        <p class="play"><i class="fa fa-play"></i></p>
+                        <p class="pause"><i class="fa fa-pause"></i></p>
+                        <p class="connecting"><i class="fa fa-spinner fa-pulse fa-lg"></i></p>
+                    </div>
+                    <div class="volume">
+                        <i class="fa fa-volume-up"></i>
+                        <div id="volumebar"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public string StationId { get; set; }
+
+    [Parameter]
+    public string Name { get; set; } = "Unknown";
+
+    [Parameter]
+    public string URL { get; set; }
+
+    [Parameter]
+    public string IconURL { get; set; } = "/images/music-icon.png";
+
+    [Parameter]
+    public Model.Station CurrentStation { get; set; }
+
+    [Parameter]
+    public IEnumerable<Model.Station> Stations { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("EnableSlider");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void StationSelected(Model.Station selectedStation)
+    {
+        CurrentStation = selectedStation;
+        JS.InvokeVoidAsync("PlayStation");
+    }
+
+}

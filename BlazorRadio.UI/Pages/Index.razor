@@ -1,0 +1,22 @@
+﻿@page "/"
+@inject BlazorRadio.Mediator.IRadioServer radioServer
+
+@if (Stations != null && Stations.Any())
+{
+    <RadioStation Stations="@Stations" CurrentStation="@Stations.First()" />
+}
+
+
+
+@code{
+    public bool InProgress { get; set; } = true;
+
+    IEnumerable<Model.Station> Stations = new List<Model.Station>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Stations = await radioServer.GetStationByTagAsync("jazz");
+        InProgress = false;
+    }
+
+}
