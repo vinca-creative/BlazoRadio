@@ -1,9 +1,18 @@
 ﻿<div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-    <a href="#">Contact</a>
+
+    <ul>
+        <li><a>GENRE</a></li>
+        <li>
+            <ul style="margin-left:20px;">
+                @foreach (var tag in Tags)
+                {
+                    <li><a href="#" data-tag="@tag">@tag.ToLower()</a></li>
+                }
+            </ul>
+        </li>
+    </ul>
+
 </div>
 
 @code{

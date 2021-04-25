@@ -515,6 +515,11 @@ h2.title {
     color: white;
     padding: 10px 15px;
     border: none;
+    z-index: 2;
+    position: absolute;
+    transform: rotate(90deg);
+    transform-origin: left top;
+    margin-left:45px;
 }
 
     .openbtn:hover {
