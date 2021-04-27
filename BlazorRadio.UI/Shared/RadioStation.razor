@@ -9,7 +9,7 @@
         <figure class="currentTrack">
             <div class="currentTrackCover"></div>
             <img class="trackIcon" src="@CurrentStation.IconURL" />
-            <figcaption>JAZZ<br/>
+            <figcaption>@Tag<br/>
             <label id="playStatus"></label></figcaption>
         </figure>
 
@@ -46,6 +46,9 @@
 
     [Parameter]
     public string Name { get; set; } = "Unknown";
+
+    [Parameter]
+    public string Tag { get; set; }
 
     [Parameter]
     public string URL { get; set; }

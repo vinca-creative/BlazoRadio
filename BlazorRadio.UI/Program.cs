@@ -19,7 +19,8 @@ namespace BlazorRadio.UI
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddSingleton<IRadioServer>((service)=> { return new Mediator.radio_browser.RadioBrowserServer(); });
+            builder.Services.AddSingleton<IRadioServer>((service) => { return new Mediator.radio_browser.RadioBrowserServer(); });
+            builder.Services.AddSingleton<StateContainer>((services) => { return new StateContainer("jazz "); });
 
             await builder.Build().RunAsync();
         }

@@ -1,22 +1,42 @@
 ﻿@page "/"
 @inject BlazorRadio.Mediator.IRadioServer radioServer
+@inject StateContainer stateContainer
 
-@if (Stations != null && Stations.Any())
+@if (!InProgress && Stations != null && Stations.Any())
 {
-    <RadioStation Stations="@Stations" CurrentStation="@Stations.First()" />
+    <RadioStation Stations="@Stations" Tag="@Tag" CurrentStation="@Stations.First()" />
+}
+else
+{
+    <Progress Visible="true" Text="Loading stations.."></Progress>
 }
 
-
-
 @code{
-    public bool InProgress { get; set; } = true;
+    bool InProgress { get; set; } = true;
 
     IEnumerable<Model.Station> Stations = new List<Model.Station>();
 
+    string Tag { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        Stations = await radioServer.GetStationByTagAsync("jazz");
+        InProgress = true;
+        Tag = stateContainer.SelectedTag;
+        Stations = await radioServer.GetStationByTagAsync(stateContainer.SelectedTag);
         InProgress = false;
+        stateContainer.OnSelectedTagChanged += TagChanged;
     }
 
+    void TagChanged() {
+        InProgress = true;
+        StateHasChanged();
+        Tag = stateContainer.SelectedTag;
+        var task = radioServer.GetStationByTagAsync(stateContainer.SelectedTag);
+        task.ContinueWith((stations) =>
+        {
+            Stations = stations.Result;
+            InProgress = false;
+            StateHasChanged();
+        });
+    }
 }
