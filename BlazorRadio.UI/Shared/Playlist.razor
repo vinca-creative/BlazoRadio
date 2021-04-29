@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime JS;
 
 <section class="playlist">
-    <div class="close"><i class="fa times-circle"></i></div>
+    <div class="close" onclick="HidePlayList()"><a class="close" href="#">X</a></div>
     <ul>
         @foreach (var station in Stations)
         {
@@ -12,8 +12,15 @@
                     </figure>
                     <label>
                         <strong>@station.Name</strong>
-                        <span><i class="fa fa-play"></i></span>
-                        @*<time>02:31</time>*@
+                        @if (CurrentStation != null && station.StationUUID == CurrentStation.StationUUID)
+                        {
+
+                            <span>playing..</span>
+                        }
+                        else
+                        {
+                            <span><i class="fa fa-play"></i></span>
+                        }
                     </label>
                 </div>
             </li>
@@ -26,13 +33,16 @@
     [Parameter]
     public IEnumerable<Model.Station> Stations { get; set; }
 
+    [CascadingParameter]
+    public Model.Station CurrentStation { get; set; }
+
     [Parameter]
     public EventCallback<Model.Station> OnStationSelected { get; set; }
 
     private void SelectStation(string stationId)
     {
         var selectedStation = Stations.FirstOrDefault(q => q.StationUUID == stationId);
-        if (selectedStation != null)
+        if (selectedStation != null && stationId != CurrentStation.StationUUID)
         {
             JS.InvokeVoidAsync("HidePlayList");
             OnStationSelected.InvokeAsync(selectedStation);

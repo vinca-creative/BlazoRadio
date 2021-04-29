@@ -4,7 +4,9 @@
     <section class="player">
         <div class="menu-button"><span></span></div>
 
-        <Playlist Stations="@Stations" OnStationSelected="StationSelected" />
+        <CascadingValue Value="CurrentStation">
+            <Playlist Stations="@Stations" OnStationSelected="StationSelected" />
+        </CascadingValue>
 
         <figure class="currentTrack">
             <div class="currentTrackCover"></div>
@@ -56,7 +58,7 @@
     [Parameter]
     public string IconURL { get; set; } = "/images/music-icon.png";
 
-    [Parameter]
+    [CascadingParameter]
     public Model.Station CurrentStation { get; set; }
 
     [Parameter]

@@ -4,7 +4,9 @@
 
 @if (!InProgress && Stations != null && Stations.Any())
 {
-    <RadioStation Stations="@Stations" Tag="@Tag" CurrentStation="@Stations.First()" />
+    <CascadingValue Value="@CurrentStation">
+        <RadioStation Stations="@Stations" Tag="@Tag" />
+    </CascadingValue>
 }
 else
 {
@@ -18,23 +20,29 @@ else
 
     string Tag { get; set; }
 
+    Model.Station CurrentStation { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         InProgress = true;
         Tag = stateContainer.SelectedTag;
         Stations = await radioServer.GetStationByTagAsync(stateContainer.SelectedTag);
+        CurrentStation = Stations != null && Stations.Any() ? Stations.First() : null;
         InProgress = false;
         stateContainer.OnSelectedTagChanged += TagChanged;
     }
 
-    void TagChanged() {
+    void TagChanged()
+    {
         InProgress = true;
-        StateHasChanged();
         Tag = stateContainer.SelectedTag;
+        StateHasChanged();
+
         var task = radioServer.GetStationByTagAsync(stateContainer.SelectedTag);
         task.ContinueWith((stations) =>
         {
             Stations = stations.Result;
+            CurrentStation = Stations != null && Stations.Any() ? Stations.First() : null;
             InProgress = false;
             StateHasChanged();
         });
