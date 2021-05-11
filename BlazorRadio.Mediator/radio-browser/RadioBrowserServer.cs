@@ -25,7 +25,7 @@ namespace BlazorRadio.Mediator.radio_browser
 
         public async Task<IEnumerable<Station>> GetStationByTagAsync(string tag)
         {
-            var result = await httpClient.Client.GetAsync($"stations/bytag/{tag}");
+            var result = await httpClient.Client.GetAsync($"stations/search?tag={tag}");
             var jsonData = await result.Content.ReadAsStringAsync();
             var jsonArray = JArray.Parse(jsonData);
             return jsonArray.Select(q => mapper.Map<Station>((JObject)q));

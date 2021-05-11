@@ -95,7 +95,7 @@ h1 {
         -moz-box-shadow: 13px 31px 52px -19px rgba(0, 0, 0, 0.75);
         box-shadow: 13px 31px 52px -19px rgba(0, 0, 0, 0.75);
     }
-
+     
         .main .player .playlist {
             z-index: 6;
             position: absolute;
@@ -141,6 +141,11 @@ h1 {
                 position: relative;
                 cursor: pointer;
             }
+
+                .main .player .playlist li:hover {
+                    background: rgb(192,192,192,0.1);
+                    border-radius:5px;
+                }
 
                 .main .player .playlist li:last-child:after {
                     display: none;
@@ -519,7 +524,7 @@ h2.title {
     position: absolute;
     transform: rotate(90deg);
     transform-origin: left top;
-    margin-left:45px;
+    margin-left: 45px;
 }
 
     .openbtn:hover {
